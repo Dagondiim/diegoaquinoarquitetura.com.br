@@ -727,18 +727,18 @@
         <div class="corner br"></div>
         <h3>Iniciar um projeto</h3>
         <p>Preencha e entraremos em contato em até 48h.</p>
-        <form>
+        <form action="https://formspree.io/f/mjgqrnyb" method="POST">
           <div class="form-field">
             <label>Nome</label>
-            <input type="text" placeholder="Seu nome completo" />
+            <input type="text" name="nome" placeholder="Seu nome completo" required />
           </div>
           <div class="form-field">
             <label>E-mail</label>
-            <input type="email" placeholder="seu@email.com" />
+            <input type="email" name="email" placeholder="seu@email.com" required />
           </div>
           <div class="form-field">
             <label>Tipo de projeto</label>
-            <select>
+            <select name="tipo">
               <option value="" disabled selected>Selecione</option>
               <option>Residencial</option>
               <option>Comercial</option>
@@ -748,7 +748,7 @@
           </div>
           <div class="form-field">
             <label>Mensagem</label>
-            <textarea placeholder="Conte sobre o seu projeto..."></textarea>
+            <textarea name="mensagem" placeholder="Conte sobre o seu projeto..."></textarea>
           </div>
           <button type="submit" class="btn-form">Enviar mensagem</button>
         </form>
@@ -789,14 +789,7 @@
       io.observe(el);
     });
 
-    // Form submit (placeholder)
-    document.querySelector('form').addEventListener('submit', function(e) {
-      e.preventDefault();
-      const btn = this.querySelector('.btn-form');
-      btn.textContent = 'Mensagem enviada ✓';
-      btn.style.background = '#4a6355';
-      btn.style.color = '#e8f0eb';
-    });
+    // Form handled by Formspree
   </script>
 </body>
 </html>
