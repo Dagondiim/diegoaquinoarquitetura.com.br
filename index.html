@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Diego Aquino Arquitetura</title>
+  <link rel="preconnect" href="https://api.fontshare.com" crossorigin />
+  <link href="https://api.fontshare.com/v2/css?f[]=clash-grotesk@300,400,500,600,700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black:  #0d0c0a;
+      --dark:   #121110;
+      --mid:    #1a1917;
+      --warm:   #222018;
+      --gold:   #c8a96b;
+      --gold2:  #e0c98a;
+      --white:  #f5f2ec;
+      --gray:   #7a7670;
+      --sage:   #4a6355;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'ClashGrotesk', sans-serif;
+      background: var(--black);
+      color: var(--white);
+      font-weight: 300;
+      font-size: 13px;
+      line-height: 1.8;
+    }
+
+    /* ── CORNER MARKS ── */
+    .corner {
+      position: absolute;
+      width: 18px; height: 18px;
+      border-color: rgba(200,169,107,0.45);
+      border-style: solid;
+    }
+    .corner.tl { top: 18px; left: 18px; border-width: 1px 0 0 1px; }
+    .corner.tr { top: 18px; right: 18px; border-width: 1px 1px 0 0; }
+    .corner.bl { bottom: 18px; left: 18px; border-width: 0 0 1px 1px; }
+    .corner.br { bottom: 18px; right: 18px; border-width: 0 1px 1px 0; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 28px 56px;
+      transition: background .4s, padding .4s, border .4s;
+    }
+    nav.scrolled {
+      background: rgba(13,12,10,0.96);
+      backdrop-filter: blur(12px);
+      padding: 18px 56px;
+      border-bottom: 1px solid rgba(200,169,107,0.15);
+    }
+    .logo {
+      display: inline-flex; align-items: center;
+      text-decoration: none;
+    }
+    .logo img {
+      height: 36px; width: auto;
+      display: block;
+    }
+    .nav-links { display: flex; gap: 38px; list-style: none; }
+    .nav-links a {
+      font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase;
+      color: rgba(245,242,236,0.55); text-decoration: none; transition: color .3s;
+    }
+    .nav-links a:hover { color: var(--gold); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh; position: relative;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: 0 56px 72px;
+      background: var(--black); overflow: hidden;
+    }
+    /* Subtle grid */
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(200,169,107,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(200,169,107,0.03) 1px, transparent 1px);
+      background-size: 72px 72px;
+    }
+    /* Photo area top-right */
+    .hero-photo {
+      position: absolute;
+      top: 0; right: 0;
+      width: 55%; height: 100%;
+      overflow: hidden;
+    }
+    .hero-photo img {
+      width: 100%; height: 100%;
+      object-fit: cover; object-position: center;
+      opacity: 0.55;
+    }
+    .hero-photo-placeholder {
+      width: 100%; height: 100%;
+      background: linear-gradient(160deg, #1a1815 0%, #252220 50%, #1a1815 100%);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0.8;
+    }
+    .hero-photo-placeholder span {
+      font-size: 10px; letter-spacing: 0.3em; color: rgba(200,169,107,0.3);
+      text-transform: uppercase;
+    }
+    /* Gradient over photo */
+    .hero-photo::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(to right, var(--black) 0%, rgba(13,12,10,0.7) 40%, rgba(13,12,10,0.1) 100%);
+    }
+    .hero-content { position: relative; z-index: 2; max-width: 560px; }
+    .hero-eyebrow {
+      font-size: 9px; letter-spacing: 0.4em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 28px; display: flex; align-items: center; gap: 14px;
+    }
+    .hero-eyebrow::before { content: ''; display: block; width: 36px; height: 1px; background: var(--gold); opacity: .5; }
+    h1 {
+      font-family: 'ClashGrotesk', sans-serif;
+      font-size: clamp(48px, 6vw, 80px);
+      font-weight: 700; line-height: 1.0;
+      color: var(--white); margin-bottom: 36px;
+      letter-spacing: -0.02em;
+    }
+    h1 em { font-style: normal; color: var(--gold2); font-weight: 300; }
+    .hero-tagline {
+      font-size: 12px; letter-spacing: 0.08em;
+      color: rgba(245,242,236,0.45);
+      max-width: 340px; line-height: 2; margin-bottom: 52px;
+    }
+    .hero-cta { display: flex; gap: 20px; align-items: center; }
+    .btn-primary {
+      display: inline-block;
+      padding: 14px 38px;
+      background: transparent;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase;
+      text-decoration: none; transition: all .3s;
+    }
+    .btn-primary:hover { background: var(--gold); color: var(--black); }
+    .hero-scroll-hint {
+      font-size: 9px; letter-spacing: 0.25em; color: rgba(245,242,236,0.3);
+      text-transform: uppercase;
+    }
+
+    /* Stats strip */
+    .stats-strip {
+      position: relative; z-index: 2;
+      display: flex; gap: 0;
+      border-top: 1px solid rgba(200,169,107,0.15);
+      margin-top: 60px; padding-top: 36px;
+    }
+    .stat {
+      flex: 1; padding-right: 40px;
+      border-right: 1px solid rgba(200,169,107,0.1);
+      margin-right: 40px;
+    }
+    .stat:last-child { border-right: none; margin-right: 0; padding-right: 0; }
+    .stat-value {
+      font-family: 'ClashGrotesk', sans-serif;
+      font-size: 40px; font-weight: 700; color: var(--gold); line-height: 1;
+    }
+    .stat-label {
+      font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
+      color: rgba(245,242,236,0.35); margin-top: 6px;
+    }
+
+    /* ── SECTIONS ── */
+    section { padding: 110px 56px; }
+    .eyebrow {
+      font-size: 9px; letter-spacing: 0.4em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 20px; display: flex; align-items: center; gap: 14px;
+    }
+    .eyebrow::before { content: ''; display: block; width: 28px; height: 1px; background: var(--gold); opacity: .5; }
+    h2 {
+      font-family: 'ClashGrotesk', sans-serif;
+      font-size: clamp(32px, 3.5vw, 52px); font-weight: 600; line-height: 1.05;
+      color: var(--white);
+    }
+
+    /* ── SOBRE ── */
+    .sobre { background: var(--dark); position: relative; }
+    .sobre-inner {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 100px; align-items: start;
+    }
+    .sobre h2 { margin-bottom: 32px; }
+    .sobre p { color: rgba(245,242,236,0.5); margin-bottom: 18px; font-size: 13px; line-height: 2; }
+    .sobre p strong { color: var(--white); font-weight: 500; }
+    .sobre-award {
+      margin-top: 40px;
+      padding: 22px 28px;
+      border: 1px solid rgba(200,169,107,0.2);
+      display: inline-flex; gap: 20px; align-items: center;
+    }
+    .award-badge {
+      font-family: 'ClashGrotesk', sans-serif;
+      font-size: 32px; font-weight: 700; color: var(--gold); line-height: 1;
+    }
+    .award-text { font-size: 11px; color: rgba(245,242,236,0.5); line-height: 1.7; }
+    .award-text strong { color: var(--gold2); display: block; }
+    .sobre-photo {
+      position: relative;
+    }
+    .sobre-photo-frame {
+      width: 100%; padding-bottom: 120%;
+      background: var(--warm); position: relative; overflow: hidden;
+    }
+    .sobre-photo-frame img {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      object-fit: cover; object-position: top;
+    }
+    .sobre-photo-frame-placeholder {
+      position: absolute; inset: 0;
+      background: linear-gradient(160deg, #1e1c18, #2a2720, #1e1c18);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .sobre-photo-frame-placeholder span {
+      font-size: 9px; letter-spacing: 0.3em; color: rgba(200,169,107,0.25); text-transform: uppercase;
+    }
+    .sobre-photo-frame::after {
+      content: ''; position: absolute;
+      bottom: -16px; right: -16px;
+      width: 65%; height: 65%;
+      border: 1px solid rgba(200,169,107,0.2);
+      pointer-events: none;
+    }
+
+    /* ── PORTFOLIO ── */
+    .portfolio { background: var(--black); }
+    .portfolio-header {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      margin-bottom: 56px;
+    }
+    .portfolio-grid {
+      display: grid;
+      grid-template-columns: 1.6fr 1fr 1fr;
+      grid-template-rows: auto auto auto;
+      gap: 3px;
+    }
+    .proj {
+      position: relative; overflow: hidden; cursor: pointer;
+      background: var(--mid);
+    }
+    .proj.featured { grid-row: span 3; }
+    .proj-img {
+      width: 100%; height: 100%; min-height: 260px;
+      position: relative; overflow: hidden;
+    }
+    .proj.featured .proj-img { min-height: 780px; }
+    .proj-img img {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform .7s ease;
+    }
+    .proj:hover .proj-img img { transform: scale(1.05); }
+    .proj-img-placeholder {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .proj-img-placeholder span {
+      font-size: 9px; letter-spacing: 0.25em; color: rgba(200,169,107,0.2); text-transform: uppercase;
+    }
+    /* Different tones per project */
+    .proj:nth-child(1) .proj-img-placeholder { background: linear-gradient(145deg, #1a1815, #262320, #1e1b18); }
+    .proj:nth-child(2) .proj-img-placeholder { background: linear-gradient(160deg, #181715, #222018, #1c1a16); }
+    .proj:nth-child(3) .proj-img-placeholder { background: linear-gradient(135deg, #1c1a17, #252220, #1f1d19); }
+    .proj:nth-child(4) .proj-img-placeholder { background: linear-gradient(150deg, #191714, #201e1b, #1a1815); }
+    .proj-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(13,12,10,0.92) 0%, rgba(13,12,10,0.3) 50%, transparent 100%);
+      opacity: 0; transition: opacity .4s;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: 28px;
+    }
+    .proj:hover .proj-overlay { opacity: 1; }
+    .proj-info-always {
+      position: absolute; bottom: 0; left: 0; right: 0; padding: 20px 24px;
+      background: linear-gradient(to top, rgba(13,12,10,0.85) 0%, transparent 100%);
+    }
+    .proj-name {
+      font-family: 'ClashGrotesk', sans-serif;
+      font-size: 18px; font-weight: 500; color: var(--white); display: block;
+    }
+    .proj-meta {
+      font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold);
+      margin-top: 4px;
+    }
+    .proj-badge {
+      display: inline-block; padding: 3px 10px;
+      border: 1px solid rgba(200,169,107,0.5);
+      font-size: 8px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold);
+      margin-bottom: 8px;
+    }
+    .portfolio-footer { margin-top: 56px; text-align: center; }
+
+    /* ── AURA ── */
+    .aura { background: var(--sage); position: relative; }
+    .aura h2 { color: #e8f0eb; margin-bottom: 16px; }
+    .aura-sub { color: rgba(232,240,235,0.6); max-width: 600px; margin-bottom: 64px; font-size: 13px; line-height: 2; }
+    .aura-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; }
+    .aura-item {
+      padding: 36px 32px 36px 0;
+      border-right: 1px solid rgba(232,240,235,0.15);
+      padding-right: 32px; margin-right: 0;
+    }
+    .aura-item:last-child { border-right: none; padding-right: 0; }
+    .aura-item + .aura-item { padding-left: 32px; }
+    .aura-code {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 36px; height: 36px;
+      border: 1px solid rgba(232,240,235,0.3);
+      font-size: 10px; letter-spacing: 0.1em; color: rgba(232,240,235,0.6);
+      margin-bottom: 20px;
+    }
+    .aura-letter {
+      font-family: 'ClashGrotesk', sans-serif;
+      font-size: 64px; font-weight: 300;
+      color: rgba(232,240,235,0.1);
+      position: absolute; top: 0; right: 0;
+      line-height: 1;
+    }
+    .aura-item { position: relative; overflow: hidden; }
+    .aura-title {
+      font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase;
+      color: #e8f0eb; font-weight: 500; margin-bottom: 8px;
+    }
+    .aura-sub-title { font-size: 10px; color: rgba(232,240,235,0.5); letter-spacing: 0.1em; margin-bottom: 14px; }
+    .aura-desc { font-size: 12px; color: rgba(232,240,235,0.55); line-height: 1.9; }
+
+    /* ── DEPOIMENTOS ── */
+    .depoimentos { background: var(--dark); }
+    .dep-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-top: 56px; }
+    .dep-card {
+      padding: 28px;
+      border: 1px solid rgba(200,169,107,0.12);
+      position: relative;
+    }
+    .dep-card::before {
+      content: '"';
+      font-family: 'ClashGrotesk', sans-serif;
+      font-size: 72px; font-weight: 300; color: rgba(200,169,107,0.12);
+      position: absolute; top: 12px; left: 20px; line-height: 1;
+    }
+    .dep-text { font-size: 12px; color: rgba(245,242,236,0.5); line-height: 1.9; margin-bottom: 24px; }
+    .dep-text strong { color: var(--white); font-weight: 500; }
+    .dep-divider { width: 24px; height: 1px; background: var(--gold); opacity: .4; margin-bottom: 16px; }
+    .dep-name { font-size: 11px; color: var(--white); letter-spacing: 0.05em; font-weight: 500; }
+    .dep-project { font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-top: 4px; }
+
+    /* ── CONTATO ── */
+    .contato { background: var(--black); position: relative; }
+    .contato-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 100px; align-items: start; }
+    .contato h2 { margin-bottom: 24px; }
+    .contato-intro { color: rgba(245,242,236,0.45); font-size: 13px; line-height: 2; max-width: 380px; margin-bottom: 48px; }
+    .contato-email-link {
+      font-family: 'ClashGrotesk', sans-serif;
+      font-size: 22px; font-weight: 400; color: var(--gold2);
+      text-decoration: none; display: block; margin-bottom: 40px;
+      letter-spacing: 0.03em; transition: color .3s;
+    }
+    .contato-email-link:hover { color: var(--white); }
+    .contato-details { display: flex; flex-direction: column; gap: 20px; }
+    .contato-detail { display: flex; gap: 16px; }
+    .detail-label {
+      font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase;
+      color: var(--gold); opacity: .7; width: 80px; flex-shrink: 0; padding-top: 2px;
+    }
+    .detail-value { font-size: 13px; color: rgba(245,242,236,0.6); line-height: 1.6; }
+    .contato-right {
+      padding: 48px;
+      border: 1px solid rgba(200,169,107,0.15);
+      position: relative;
+    }
+    .contato-right h3 {
+      font-family: 'ClashGrotesk', sans-serif;
+      font-size: 26px; font-weight: 600; color: var(--white); margin-bottom: 8px;
+    }
+    .contato-right p { color: rgba(245,242,236,0.4); font-size: 12px; line-height: 1.8; margin-bottom: 36px; }
+    .form-field { margin-bottom: 20px; }
+    .form-field label {
+      display: block; font-size: 9px; letter-spacing: 0.25em; text-transform: uppercase;
+      color: rgba(245,242,236,0.4); margin-bottom: 8px;
+    }
+    .form-field input,
+    .form-field textarea,
+    .form-field select {
+      width: 100%; background: transparent;
+      border: none; border-bottom: 1px solid rgba(200,169,107,0.2);
+      padding: 10px 0; color: var(--white); font-family: 'ClashGrotesk', sans-serif;
+      font-size: 13px; font-weight: 300; outline: none;
+      transition: border-color .3s;
+    }
+    .form-field input:focus,
+    .form-field textarea:focus,
+    .form-field select:focus { border-bottom-color: var(--gold); }
+    .form-field select { appearance: none; -webkit-appearance: none; cursor: pointer; }
+    .form-field select option { background: var(--dark); color: var(--white); }
+    .form-field textarea { resize: none; height: 80px; }
+    .btn-form {
+      width: 100%; padding: 16px;
+      background: var(--gold);
+      border: none; color: var(--black);
+      font-family: 'ClashGrotesk', sans-serif;
+      font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase;
+      cursor: pointer; transition: background .3s; margin-top: 8px;
+    }
+    .btn-form:hover { background: var(--gold2); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--dark);
+      border-top: 1px solid rgba(200,169,107,0.1);
+      padding: 36px 56px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .footer-brand img {
+      height: 24px; width: auto; opacity: 0.45;
+    }
+    .footer-tagline {
+      font-size: 10px; letter-spacing: 0.12em;
+      color: rgba(245,242,236,0.2);
+      font-family: 'ClashGrotesk', sans-serif; font-weight: 300;
+    }
+    .footer-copy { font-size: 10px; color: rgba(245,242,236,0.2); letter-spacing: 0.08em; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 980px) {
+      nav, nav.scrolled { padding: 20px 28px; }
+      .nav-links { display: none; }
+      section { padding: 80px 28px; }
+      .hero { padding: 0 28px 60px; }
+      .hero-photo { display: none; }
+      .sobre-inner { grid-template-columns: 1fr; gap: 50px; }
+      .sobre-photo { display: none; }
+      .portfolio-grid { grid-template-columns: 1fr; }
+      .proj.featured { grid-row: span 1; }
+      .aura-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+      .dep-grid { grid-template-columns: 1fr 1fr; }
+      .contato-inner { grid-template-columns: 1fr; gap: 50px; }
+      .stats-strip { flex-wrap: wrap; gap: 24px; }
+      .stat { border-right: none; }
+      footer { flex-direction: column; gap: 12px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav id="nav">
+    <a href="#" class="logo">
+      <img src="logo.svg" alt="Diego Aquino Arquitetura" />
+    </a>
+    <ul class="nav-links">
+      <li><a href="#sobre">Sobre</a></li>
+      <li><a href="#portfolio">Portfólio</a></li>
+      <li><a href="#metodologia">A.U.R.A.</a></li>
+      <li><a href="#contato">Contato</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="home">
+    <div class="corner tl"></div>
+    <div class="corner br"></div>
+    <div class="hero-photo">
+      <img src="casa-rj-fachada.jpg" alt="Casa RJ · Diego Aquino Arquitetura" />
+    </div>
+    <div class="hero-content">
+      <div class="hero-eyebrow">Arquitetura &amp; Interiores · Brasília</div>
+      <h1>Não é sobre<br>m<sup style="font-size:0.45em;vertical-align:super">2</sup>,<br>é sobre metros<br><em>vividos</em></h1>
+      <p class="hero-tagline">Projetos residenciais e comerciais de alto padrão, com método, clareza e decisão.</p>
+      <div class="hero-cta">
+        <a href="#contato" class="btn-primary">Iniciar Projeto</a>
+        <span class="hero-scroll-hint">↓ Conheça o escritório</span>
+      </div>
+    </div>
+    <div class="stats-strip">
+      <div class="stat">
+        <div class="stat-value">+150</div>
+        <div class="stat-label">Projetos no Brasil</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">+10</div>
+        <div class="stat-label">Anos no mercado</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">#2</div>
+        <div class="stat-label">Melhor Arquiteto · Club & Casa Centro-Oeste 2025</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">ARQ.</div>
+        <div class="stat-label">Formação internacional em arquitetura</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SOBRE -->
+  <section class="sobre" id="sobre">
+    <div class="corner tl"></div>
+    <div class="corner br"></div>
+    <div class="sobre-inner">
+      <div>
+        <div class="eyebrow">Sobre o Escritório</div>
+        <h2>Arquitetura é<br>método, clareza<br>e decisão</h2>
+        <p style="margin-top:32px">Nascido em Brasília, Diego Aquino construiu sua visão de arquitetura a partir do diálogo entre cidade, espaço e experiência. <strong>Formado em Arquitetura nos Estados Unidos</strong>, retornou ao Brasil trazendo uma abordagem que une repertório internacional, domínio técnico e tecnologia aplicada ao processo criativo.</p>
+        <p>À frente de um escritório focado em projetos residenciais e comerciais de alto padrão, acredita que cada projeto nasce da compreensão do modo de viver de cada cliente — resultando em espaços funcionais, esteticamente precisos e pensados para serem vividos plenamente.</p>
+        <div class="sobre-award">
+          <div class="award-badge">#2</div>
+          <div class="award-text">
+            <strong>Clube &amp; Casa · Centro-Oeste 2025</strong>
+            Melhor Arquiteto · Anuário
+          </div>
+        </div>
+      </div>
+      <div class="sobre-photo">
+        <div class="sobre-photo-frame">
+          <img src="diego-aquino.jpg" alt="Diego Aquino · Arquiteto" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PORTFOLIO -->
+  <section class="portfolio" id="portfolio">
+    <div class="portfolio-header">
+      <div>
+        <div class="eyebrow">Portfólio</div>
+        <h2>Projetos<br>Selecionados</h2>
+      </div>
+    </div>
+    <div class="portfolio-grid">
+
+      <!-- Projeto 1: Casa RJ (destaque) -->
+      <div class="proj featured">
+        <div class="proj-img">
+          <img src="casa-rj-1.jpg" alt="Casa RJ · Diego Aquino Arquitetura" />
+        </div>
+        <div class="proj-info-always">
+          <span class="proj-badge">Destaque · Anuário Club &amp; Casa</span>
+          <span class="proj-name">Casa RJ</span>
+          <div class="proj-meta">600m² · Jardim Botânico · Brasília-DF · 2026</div>
+        </div>
+      </div>
+
+      <!-- Projeto 2: Apt Prestige -->
+      <div class="proj">
+        <div class="proj-img">
+          <img src="prestige-1.jpg" alt="Apt Prestige · Diego Aquino Arquitetura" />
+        </div>
+        <div class="proj-info-always">
+          <span class="proj-badge">Destaque · Revista Decorar</span>
+          <span class="proj-name">Apt Prestige</span>
+          <div class="proj-meta">70m² · Brasília-DF · 2024</div>
+        </div>
+      </div>
+
+      <!-- Projeto 3: Cobertura Real -->
+      <div class="proj">
+        <div class="proj-img">
+          <img src="cobertura-real-1.jpg" alt="Cobertura Real · Diego Aquino Arquitetura" />
+        </div>
+        <div class="proj-info-always">
+          <span class="proj-name">Cobertura Real</span>
+          <div class="proj-meta">140m² · Brasília-DF · 2025</div>
+        </div>
+      </div>
+
+      <!-- Projeto 4: Lar Moniz -->
+      <div class="proj">
+        <div class="proj-img">
+          <img src="lar-moniz-1.jpg" alt="Lar Moniz · Diego Aquino Arquitetura" />
+        </div>
+        <div class="proj-info-always">
+          <span class="proj-name">Lar Moniz</span>
+          <div class="proj-meta">150m² · Brasília-DF · 2025</div>
+        </div>
+      </div>
+
+      <!-- Projeto 5: Apt Gardênias -->
+      <div class="proj">
+        <div class="proj-img">
+          <img src="gardenias-1.jpg" alt="Apt Gardênias · Diego Aquino Arquitetura" />
+        </div>
+        <div class="proj-info-always">
+          <span class="proj-name">Apt Gardênias</span>
+          <div class="proj-meta">160m² · Noroeste · Brasília-DF · 2025</div>
+        </div>
+      </div>
+
+      <!-- Projeto 6: Apt RJ -->
+      <div class="proj">
+        <div class="proj-img">
+          <img src="apt-rj-1.jpg" alt="Apt RJ · Diego Aquino Arquitetura" />
+        </div>
+        <div class="proj-info-always">
+          <span class="proj-name">Apt RJ</span>
+          <div class="proj-meta">110m² · Brasília-DF · 2025</div>
+        </div>
+      </div>
+
+      <!-- Projeto 7: Apt Azzure -->
+      <div class="proj">
+        <div class="proj-img">
+          <img src="azzure-1.jpg" alt="Apt Azzure · Diego Aquino Arquitetura" />
+        </div>
+        <div class="proj-info-always">
+          <span class="proj-name">Apt Azzure</span>
+          <div class="proj-meta">240m² · Brasília-DF · 2025</div>
+        </div>
+      </div>
+
+    </div>
+    <div class="portfolio-footer">
+      <a href="https://www.instagram.com/diegoaquino.arq" target="_blank" class="btn-primary">Ver mais no Instagram</a>
+    </div>
+  </section>
+
+  <!-- METODOLOGIA A.U.R.A. -->
+  <section class="aura" id="metodologia">
+    <div class="corner tl" style="border-color: rgba(232,240,235,0.25)"></div>
+    <div class="corner br" style="border-color: rgba(232,240,235,0.25)"></div>
+    <div class="eyebrow" style="color: rgba(232,240,235,0.6)">
+      <span style="display:block; width:28px; height:1px; background:rgba(232,240,235,0.4)"></span>
+      Nossa Metodologia
+    </div>
+    <h2 style="color:#e8f0eb; margin-bottom:14px">Metodologia A.U.R.A.</h2>
+    <p class="aura-sub">Um processo exclusivo que integra atendimento completo, soluções autorais, realidade imersiva e acompanhamento contínuo — garantindo clareza, personalização e segurança em todas as etapas.</p>
+    <div class="aura-grid">
+      <div class="aura-item">
+        <div class="aura-letter">A</div>
+        <div class="aura-code">A.01</div>
+        <div class="aura-title">Atendimento</div>
+        <div class="aura-sub-title">Ponta a ponta</div>
+        <p class="aura-desc">Acompanhamento completo em todas as etapas do projeto, do briefing inicial à entrega final, garantindo alinhamento, clareza e segurança ao cliente.</p>
+      </div>
+      <div class="aura-item">
+        <div class="aura-letter">U</div>
+        <div class="aura-code">U.02</div>
+        <div class="aura-title">Único</div>
+        <div class="aura-sub-title">Exclusividade e assinatura</div>
+        <p class="aura-desc">Cada projeto é desenvolvido de forma exclusiva, com soluções autorais que refletem a identidade, a rotina e as necessidades de cada cliente.</p>
+      </div>
+      <div class="aura-item">
+        <div class="aura-letter">R</div>
+        <div class="aura-code">R.03</div>
+        <div class="aura-title">Realidade imersiva</div>
+        <div class="aura-sub-title">VR / Metaverso</div>
+        <p class="aura-desc">Uso de realidade virtual para apresentar e validar o projeto de forma imersiva, permitindo decisões mais seguras antes do início da obra.</p>
+      </div>
+      <div class="aura-item">
+        <div class="aura-letter">A</div>
+        <div class="aura-code">A.04</div>
+        <div class="aura-title">Acompanhamento</div>
+        <div class="aura-sub-title">Obra e pós-entrega</div>
+        <p class="aura-desc">Presença ativa durante a execução da obra e no pós-entrega, assegurando que o projeto seja fielmente executado e atenda ao resultado esperado.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- DEPOIMENTOS -->
+  <section class="depoimentos" id="depoimentos">
+    <div class="eyebrow">Depoimentos</div>
+    <h2>O que dizem<br>nossos clientes</h2>
+    <div class="dep-grid">
+      <div class="dep-card">
+        <p class="dep-text">Diego e equipe traduziram muito bem os nossos objetivos no projeto. <strong>A experiência de ver o apartamento pronto no metaverso foi sensacional!</strong> Parabéns pela excelência do trabalho DA Arquitetura.</p>
+        <div class="dep-divider"></div>
+        <div class="dep-name">Isabel Oliveira</div>
+        <div class="dep-project">Projeto MI</div>
+      </div>
+      <div class="dep-card">
+        <p class="dep-text">Trabalhar com o Diego foi maravilhoso! Ele e sua equipe nos ajudaram a realizar um grande sonho! <strong>Pensaram em cada detalhe, foram criativos, superaram nossas expectativas.</strong></p>
+        <div class="dep-divider"></div>
+        <div class="dep-name">Leonardo e Raquel</div>
+        <div class="dep-project">Gourmet LR · Paraná</div>
+      </div>
+      <div class="dep-card">
+        <p class="dep-text">Diego é um excelente arquiteto. Fiquei muito feliz com o resultado do projeto. <strong>Pedi um projeto simples e recebi um projeto elegante e aconchegante.</strong> Com certeza recomendo.</p>
+        <div class="dep-divider"></div>
+        <div class="dep-name">Felipe Bulhões</div>
+        <div class="dep-project">Apt FB</div>
+      </div>
+      <div class="dep-card">
+        <p class="dep-text">Profissional muito capacitado e sempre disposto a orientar em tudo. <strong>Excelente projeto e acompanhamento de obra, além do bom gosto e adaptabilidade.</strong> Recomendo a todos.</p>
+        <div class="dep-divider"></div>
+        <div class="dep-name">Vínicius Castellato</div>
+        <div class="dep-project">Apto Tapajós</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTATO -->
+  <section class="contato" id="contato">
+    <div class="corner tl"></div>
+    <div class="corner tr"></div>
+    <div class="contato-inner">
+      <div>
+        <div class="eyebrow">Contato</div>
+        <h2>Vamos criar algo<br>extraordinário?</h2>
+        <p class="contato-intro">Atendemos um número limitado de projetos por ano para garantir dedicação total a cada cliente.</p>
+        <a href="mailto:diego@diegoaquinoarquitetura.com.br" class="contato-email-link">diego@diegoaquinoarquitetura.com.br</a>
+        <div class="contato-details">
+          <div class="contato-detail">
+            <span class="detail-label">Telefone</span>
+            <span class="detail-value">+55 61 9 9275-0225</span>
+          </div>
+          <div class="contato-detail">
+            <span class="detail-label">Instagram</span>
+            <span class="detail-value">@diegoaquino.arq</span>
+          </div>
+          <div class="contato-detail">
+            <span class="detail-label">Endereço</span>
+            <span class="detail-value">SRTV 701 Sul, Ed. Multiempresarial<br>Bloco O · Sala 241 · Brasília-DF</span>
+          </div>
+        </div>
+      </div>
+      <div class="contato-right">
+        <div class="corner tl"></div>
+        <div class="corner br"></div>
+        <h3>Iniciar um projeto</h3>
+        <p>Preencha e entraremos em contato em até 48h.</p>
+        <form>
+          <div class="form-field">
+            <label>Nome</label>
+            <input type="text" placeholder="Seu nome completo" />
+          </div>
+          <div class="form-field">
+            <label>E-mail</label>
+            <input type="email" placeholder="seu@email.com" />
+          </div>
+          <div class="form-field">
+            <label>Tipo de projeto</label>
+            <select>
+              <option value="" disabled selected>Selecione</option>
+              <option>Residencial</option>
+              <option>Comercial</option>
+              <option>Interiores</option>
+              <option>Outro</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label>Mensagem</label>
+            <textarea placeholder="Conte sobre o seu projeto..."></textarea>
+          </div>
+          <button type="submit" class="btn-form">Enviar mensagem</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <span class="footer-brand"><img src="logo.svg" alt="Diego Aquino Arquitetura" /></span>
+    <span class="footer-tagline">Não é sobre m², é sobre metros vividos</span>
+    <span class="footer-copy">© 2026 · diegoaquinoarquitetura.com.br</span>
+  </footer>
+
+  <script>
+    // Nav scroll
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 50);
+    });
+
+    // Reveal on scroll
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.style.opacity = '1';
+          e.target.style.transform = 'translateY(0)';
+        }
+      });
+    }, { threshold: 0.08 });
+
+    document.querySelectorAll(
+      '.aura-item, .dep-card, .proj, .stat, .sobre-award'
+    ).forEach(el => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(24px)';
+      el.style.transition = 'opacity 0.75s ease, transform 0.75s ease';
+      io.observe(el);
+    });
+
+    // Form submit (placeholder)
+    document.querySelector('form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const btn = this.querySelector('.btn-form');
+      btn.textContent = 'Mensagem enviada ✓';
+      btn.style.background = '#4a6355';
+      btn.style.color = '#e8f0eb';
+    });
+  </script>
+</body>
+</html>
